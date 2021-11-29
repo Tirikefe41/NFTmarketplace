@@ -1411,7 +1411,6 @@ const marketplaceABI = [
 // check if window.ethereum is available
 
 window.addEventListener('load', async() => {
-  
   if (typeof window.ethereum !== 'undefined') {
     console.log('window.ethereum is enabled')
     if (window.ethereum.isMetaMask === true) {

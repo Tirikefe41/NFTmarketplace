@@ -26,10 +26,30 @@
     </nav>
   </header>
   <main>
+    <form>
+      <div class="container">
+        <hr>
+        <h2>Create new item</h2>
+        <input type="text" placeholder="Item Name" name="nft_name" id="nft_name" required>
+    
+        <input type="text" placeholder="provide a detailed description of your item." name="nft_description" id="nft_description" required>
+    
+        <input type="file" name="nft_image" id="nft_image" accept="image/png, image/jpeg" required>
+        <hr>
 
+        <button type="submit" class="createNFTBtn">Create</button>
+      </div>
+    </form>
   </main>
   <footer>
       <p>All Rights Reserved</p>
   </footer>
+
 </body>
+
+
+
+<script src="../js/validate.js"></script>
+
+
 </html>
