@@ -29,15 +29,17 @@
     <form>
       <div class="container">
         <hr>
-        <h2>Create new item</h2>
+        <h2>Create new Item</h2>
         <input type="text" placeholder="Item Name" name="nft_name" id="nft_name" required>
     
         <input type="text" placeholder="provide a detailed description of your item." name="nft_description" id="nft_description" required>
     
-        <input type="file" name="nft_image" id="nft_image" accept="image/png, image/jpeg" required>
+        <input type="file" name="nft_image" id="nft_image" accept="image/gif, image/jpeg, image/png" required>
+        <br>
+        <img src="" alt="nft_image" id = "nftImage" width="700" height="450">
         <hr>
-
-        <button type="submit" class="createNFTBtn">Create</button>
+        
+        <button type="submit" class="createNFTBtn" id="createBtn">Create</button>
       </div>
     </form>
   </main>
@@ -49,7 +51,11 @@
 
 
 
-<script src="../js/validate.js"></script>
+<script type="module" src="../js/index.js"></script>
+<script type="module" src="../js/modules/detectmm.js"></script>
+<script type="module" src="../js/modules/ABIS_and_Addresses.js"></script>
+<script type="module" src="../js/modules/create.js"></script>
+
 
 
 </html>

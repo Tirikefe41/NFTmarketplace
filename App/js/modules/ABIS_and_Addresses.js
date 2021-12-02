@@ -1,9 +1,8 @@
-// contracts addresses on Rinkeby:
-const nftMarketplaceAddress = '0x77EAe40e83824C8736db06bb594DFA71917F856B'
-const nft = '0xD3B4B1C5B24a8ae444a21ca2E78f80bDBBe28f81';
+export const nftMarketplaceAddress = '0x77EAe40e83824C8736db06bb594DFA71917F856B'
+export const nftAddress = '0xD3B4B1C5B24a8ae444a21ca2E78f80bDBBe28f81';
 // const adminAddress = '0x92924b15E346B12A9f7a50f7050cb60b653Ec096'
 
-const nftAPI =
+export const nftABI =
 [
   {
     "inputs": [
@@ -379,7 +378,7 @@ const nftAPI =
     "type": "function"
   }
 ]
-const marketplaceABI = [
+export const marketplaceABI = [
   {
     "inputs": [
       {
@@ -1406,43 +1405,3 @@ const marketplaceABI = [
     "type": "function"
   }
 ]
-
-
-window.addEventListener('load', async() => {
-    if (typeof window.ethereum !== 'undefined') {
-      console.log('window.ethereum is enabled')
-      if (window.ethereum.isMetaMask === true) {
-        console.log('MetaMask is active')
-        await ethereum.request({ method: 'eth_requestAccounts'})
-        let myCreatedNFTS = await getCreatedNFTS();
-        let myPurchasedNFTS = await getPurchasedNFTS();
-        console.log(myCreatedNFTS);
-        console.log(myPurchasedNFTS);
-        console.log(ethereum.selectedAddress);
-      } else {
-        console.log('MetaMask is not available')
-      }
-    } else {
-      console.log('window.ethereum is not found')
-    }
-})
-
-let getCreatedNFTS = async() => {
-    let web3 = new Web3(window.ethereum);
-    window.ethereum.enable();
-    const nftMarketplace = new web3.eth.Contract(marketplaceABI,nftMarketplaceAddress);
-    nftMarketplace.setProvider(window.ethereum);
-    await ethereum.request({ method: 'eth_requestAccounts'})
-    let createdNFTS = await nftMarketplace.methods.getItemsCreated().call();
-    return createdNFTS;
-}
-
-let getPurchasedNFTS = async() => {
-    let web3 = new Web3(window.ethereum);
-    window.ethereum.enable();
-    const nftMarketplace = new web3.eth.Contract(marketplaceABI,nftMarketplaceAddress);
-    nftMarketplace.setProvider(window.ethereum);
-    await ethereum.request({ method: 'eth_requestAccounts'})
-    let purchasedNFTS = await nftMarketplace.methods.getMyNFTS().call();
-    return purchasedNFTS;
-}
