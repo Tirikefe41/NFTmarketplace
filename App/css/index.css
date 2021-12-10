@@ -1,7 +1,7 @@
 body {
-  margin: 0;
-  padding: 0;
-  text-align: center;
+  padding: 0px;
+  padding: 0px;
+  background-color: #F5F5F5	;
 }
 
 
@@ -10,6 +10,10 @@ body {
 /* Add padding to containers */
 .container {
   padding: 16px;
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  margin: 10px;
+  padding: 10px;
 }
 
 /* Full-width input fields */
@@ -19,6 +23,7 @@ input[type=text], input[type=file] {
   margin: 10px 0 22px 0;
   display: inline-block;
   border: none;
+  border-radius: 1.5rem;
   background: #f1f1f1;
 }
 
@@ -35,8 +40,9 @@ hr {
 
 /* Set a style for the submit/register button */
 .createNFTBtn {
-  background-color: #04AA6D;
+  background-color: #33c08c;
   color: white;
+  border-radius: 1.5rem;
   padding: 16px 20px;
   margin: 8px 0;
   border: none;
@@ -49,44 +55,166 @@ hr {
   opacity:1;
 }
 
-/* Add a blue text color to links */
-a {
-  color: dodgerblue;
-}
 
 footer {
   height: auto;
 }
 
-nav {
-    width: 100%;
-    text-align: center;
+nav ul {
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 10px;
+  display: flex;
+  list-style: none;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  background-color: #ffffff	;
+  border-radius: 1.5rem;
+}
+
+
+ul li {
+  display: block;
+}
+
+#logo {
+  flex-grow: 5;
+}
+
+
+.nav {
+  flex-grow: 1;
+}
+
+nav ul li a {
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+}
+
+nav ul li a:hover {
+  color: rgb(0, 55, 250);
+}
+
+body {
+  padding: 0px;
+  padding: 0px;
+  background-color: #F5F5F5;
+}
+
+.nftsContainer {
+  border-radius: 1.5rem;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  padding: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
   }
 
-nav ul{
-    width: 100%;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
+.pending {
+  background-color: cadetblue;
+  border-radius: 1.5rem;
+  padding: 10px;
+  margin: 0 10px 10px 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
 
-  nav ul li{
-    width: 20%;
-    float: left;
-    display: block;    
-  }
+.created {
+  background-color: chocolate;
+  border-radius: 1.5rem;
+  padding: 10px;
+  margin: 0 10px 10px 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
 
-  nav ul li a{
-    text-decoration: none;
-    color: rgb(0, 0, 0);
-    text-align: center;
-    padding: 8px 0;
-    display: block;
-    width: 100%;
-    background-color: rgb(230, 215, 173);
-  }
+.listed {
+  background-color: crimson;
+  border-radius: 1.5rem;
+  padding: 10px;
+  margin: 0 10px 10px 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
 
-  nav ul li a:hover {
-    background-color: rgb(252, 234, 184);
-  }
+.removed {
+  background-color: crimson;
+  border-radius: 1.5rem;
+  padding: 10px;
+  margin: 0 10px 10px 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.nftCard {
+  background-color: #F5F5F5;
+  border-radius: 1.5rem;
+  margin: 10px 0 10px 0;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  
+}
+.cardCover {
+  padding: 10px;
+}
+
+.cardCover img {
+  border-radius: 1.5rem;
+}
+
+.cardContent {
+  padding: 0 10px 0 10px;
+}
+
+
+#sellBtn {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 0.9rem;
+  background-color: #4098EC;
+}
+
+.nftPrice {
+  display: flex;
+  flex-direction: row;
+}
+/*
+<div class = "nftCard">
+
+          <div class = "cardCover">
+            <img src="" alt="nft image"> 
+          </div>
+
+          <div class = "cardContent">
+            <p class = "nftName"></p>
+            <p class = "nftDescription"></p>
+          </div>
+
+          <div class = "sellBtn">
+            <button>Sell</button>
+          </div>
+
+        </div>
+
+
+    */
+    

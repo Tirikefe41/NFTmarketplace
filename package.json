@@ -2,8 +2,13 @@
   "devDependencies": {
     "@openzeppelin/contracts": "^4.4.0",
     "@truffle/hdwallet-provider": "^1.7.0",
+    "@web/dev-server": "^0.1.28",
+    "browserify": "^17.0.0",
     "dotenv": "^10.0.0",
     "ganache-cli": "^6.12.2",
+    "ipfs": "^0.60.2",
+    "ipfs-core": "^0.12.2",
+    "live-server": "^1.2.1",
     "nft.storage": "^5.0.0",
     "truffle": "^5.4.22",
     "truffle-assertions": "^0.9.2"

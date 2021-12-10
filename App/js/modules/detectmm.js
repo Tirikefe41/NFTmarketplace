@@ -11,11 +11,22 @@ export let isMetaMaskavailable = () => {
 }
 
 export let connectMetamask = async() => {
-  let result = isMetaMaskavailable();
-  if(result === true) {
-    await ethereum.request({ method: 'eth_requestAccounts'});
-    let connectedAddress = ethereum.selectedAddress;
-    alert('metamask is connected successfully with address ' + connectedAddress);
+
+  if(isMetaMaskavailable() === true) {
+    await ethereum.request({ method: 'eth_requestAccounts'})
+    .then(handleAccountsChanged)
+    .catch((error) => {
+      if (error.code === 4001) {
+        console.log('Please connect to MetaMask.');
+        alert('Please connect to MetaMask.');
+      } else {
+        console.error(error);
+      }
+    });
+
+    ethereum.on('accountsChanged', handleAccountsChanged);
+
+    alert('metamask is connected successfully with address ' + getCurrentAccount());
     let walletBtn = document.getElementById("mm-connect");
     walletBtn.style.backgroundColor="#32CD32";
   } else {
@@ -23,5 +34,31 @@ export let connectMetamask = async() => {
   }
 }
 
+export let isMMConnected = () => {
+  if(isMetaMaskavailable()) {
+    return ethereum.selectedAddress !== null;
+  }
+}
 
-  
+
+export let getChainId = async () => {
+  let result = await ethereum.request({ method: 'eth_chainId' });
+  let chainId = parseInt(result, 16);
+  return chainId;
+}
+
+export let getCurrentAccount = () => {
+  if(isMMConnected()) {
+    return ethereum.selectedAddress;
+  } else {
+    connectMetamask();
+  }
+}
+
+let handleAccountsChanged = (accounts) => {
+  if (accounts.length === 0) {
+    console.log('Please connect to MetaMask.');
+  } else if (accounts[0] !== getCurrentAccount()) {
+    currentAccount = accounts[0];
+  }
+}

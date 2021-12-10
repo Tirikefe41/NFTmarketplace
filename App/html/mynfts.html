@@ -5,33 +5,110 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>A.N.I.M.E NFT Marketplace</title>
+  <script type='text/javascript' src='../js/modules/config.js'></script>
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
   <link rel="stylesheet" type="text/css" href="../css/index.css">
+
 
 </head>
 
 <body>
-  <h1 id="website-name">A.N.I.M.E Marketplace</h1>
   <header>
     <nav>
-        <ul>
-            <li><a href= "explore.html">Explore</a></li>
-            <li><a href = "mynfts.html">My NFTS</a></li>
-            <li><a href= "create.html">Create</a></li>
-            <li><a href= "validate.html">Validate</a></li>
-            <button id="mm-connect">
-              <img width="25px" height="25px" src="https://img.icons8.com/ios-filled/50/000000/wallet.png"/>
-            </button>
-        </ul>
+      <ul>
+        <li id="logo"><a href = "index.html"><h1>A.N.I.M.E. Marketplace</h1></a></li>
+        <li class="nav"><a href= "explore.html">Explore</a></li>
+        <li class="nav"><a href = "mynfts.html">My NFTS</a></li>
+        <li class="nav"><a href= "create.html">Create</a></li>
+        <li class="nav"><a href= "validate.html">Validate</a></li>
+        <li class="nav"><button id="mm-connect">
+          <img width="25px" height="25px" src="https://img.icons8.com/ios-filled/50/000000/wallet.png"/>
+        </button></li>
+      </ul>
     </nav>
   </header>
   <main>
-    <div id="createdNFTS">
-    </div>
-    <div id="PurchasedNFTS">
+    <div class = "nftsContainer">
+      <h3>Created NFTS</h3>
+      <div class = "created">
+      </div>
+
+      <h3>Pending NFTS</h3>
+      <div class = "pending">
+
+        <div class = "nftCard">
+
+          <div class = "cardCover">
+
+          </div>
+
+          <div class = "cardContent">
+            <p class = "nftName"></p>
+            <p class = "nftDescription"></p>
+            <div class = "nftPrice">
+              <span class = "priceInEth"></span>
+              <span class = "priceInDollar"></span>
+            </div>
+          </div>
+
+          <div class = "withdrawBtn">
+            <button>Withdraw</button>
+          </div>
+          
+        </div>
+      </div>
+
+      <h3>Listed NFTS</h3>
+      <div class = "listed">
+
+        
+        <div class = "nftCard">
+
+          <div class = "cardCover">
+
+          </div>
+
+          <div class = "cardContent">
+            <p class = "nftName"></p>
+            <p class = "nftDescription"></p>
+           
+          </div>
+
+          <div class = "withdrawBtn">
+            <button>Withdraw</button>
+          </div>
+          
+        </div>
+
+      </div>
+      <h3>Removed</h3>
+      <div class = "removed">
+
+        <div class = "nftCard">
+
+          <div class = "cardCover">
+
+          </div>
+
+          <div class = "cardContent">
+            <p class = "nftName"></p>
+            <p class = "nftDescription"></p>
+            <div class = "nftPrice">
+              <span class = "priceInEth"></span>
+              <span class = "priceInDollar"></span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </main>
 </body>
 
+
 <script type="module" src="../js/index.js"></script>
+<script type="module" src="../js/modules/mynfts.js"></script>
+
+
 </html>
