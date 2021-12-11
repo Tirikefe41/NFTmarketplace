@@ -7,10 +7,10 @@ const listedNFTS = document.querySelector('.listed');
 const removednfts = document.querySelector(".removed");
 
 window.addEventListener('load', async() => {
-  await getCreatedNFTS()
+  await getCreatedNFTS();
 })
 
-let getCreatedNFTSMetadataFromURI = async(metadataURL) => {
+let getCreatedNFTSMetadataFromURI = async(metadataURL,id) => {
   fetch(metadataURL).then(function (response) {
     return response.text();
   }).then(function (data) {
@@ -19,6 +19,7 @@ let getCreatedNFTSMetadataFromURI = async(metadataURL) => {
     
     let nftCard = createNode('div');
     nftCard.setAttribute("class","nftCard");
+    
 
     let cardCover = createNode('div');
     cardCover.setAttribute("class","cardCover");
@@ -39,14 +40,20 @@ let getCreatedNFTSMetadataFromURI = async(metadataURL) => {
     description.setAttribute("class","nftDescription");
     description.innerHTML = metadata.Description;
 
+    let tokenID = createNode('p');
+    tokenID.innerHTML = id;
+    tokenID.hidden = true;
+
   
     let sellBtn = document.createElement('button');
-    sellBtn.setAttribute("id","sellBtn");
+    sellBtn.setAttribute("class","sellBtn");
+    sellBtn.onclick = goToSellPage;
     sellBtn.innerHTML = "Sell";
   
 
     append(cardContent,name);
     append(cardContent,description);
+    append(cardContent,tokenID);
 
     append(nftCard,cardCover);
     append(nftCard,cardContent);
@@ -60,6 +67,21 @@ let getCreatedNFTSMetadataFromURI = async(metadataURL) => {
   }).catch(function (err) {
     console.warn('Something went wrong.', err);
   });
+}
+
+let goToSellPage = (event) => {
+  sessionStorage.setItem("nftName",event.target.parentNode.children[1].children[0].lastChild.data);
+  sessionStorage.setItem("nftDescription",event.target.parentNode.children[1].children[1].lastChild.data);
+  sessionStorage.setItem("nftImage",event.target.parentNode.children[0].lastChild.src);
+  sessionStorage.setItem("nftID",event.target.parentNode.children[1].children[2].lastChild.data);
+
+  console.log(event.target.parentNode);
+  console.log("image : " + event.target.parentNode.children[0].lastChild.src);
+  console.log("Description " + event.target.parentNode.children[1].children[1].lastChild.data);
+  console.log("Name "  + event.target.parentNode.children[1].children[0].lastChild.data);
+  console.log("ID "  + event.target.parentNode.children[1].children[2].lastChild.data);
+
+  window.location.href = "../html/sell.html";
 }
 
 let getPendingMetadataFromURI = async(metadataURL) => {
@@ -94,7 +116,6 @@ let getPendingMetadataFromURI = async(metadataURL) => {
   
     let sellBtn = document.createElement('button');
     sellBtn.setAttribute("id","sellBtn");
-    sellBtn.setAttribute("onclick","redirectToSellPage()")
     sellBtn.innerHTML = "Sell";
   
 
@@ -109,22 +130,22 @@ let getPendingMetadataFromURI = async(metadataURL) => {
   
     append(createdNFTS,nftCard);
 
+
   return data;
   }).catch(function (err) {
     console.warn('Something went wrong.', err);
   });
 }
 
-let redirectToSellPage = () => {
-  window.location.href = "../html/sell.html";
-}
+
 
 let getCreatedNFTS = async () => {
   let created = await getAllOwnedTokensURIs(mm.getCurrentAccount());
-  for(let i = 0; i < created.length ; i++) {
-    getCreatedNFTSMetadataFromURI(created[i]);
-  }
-  console.log("created tokens uris: "+ created);
+  console.log(created)
+  Object.keys(created).forEach(key => {
+    console.log(key + " " + created[key]);
+    getCreatedNFTSMetadataFromURI(created[key],key);
+  })
   return created;
 }
 

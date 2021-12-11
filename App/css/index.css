@@ -7,6 +7,10 @@ body {
 
 * {box-sizing: border-box}
 
+h3 {
+  padding:10px;
+  margin-bottom: 10px;
+}
 /* Add padding to containers */
 .container {
   padding: 16px;
@@ -103,13 +107,13 @@ body {
   background-color: #F5F5F5;
 }
 
-.nftsContainer {
+.container {
   border-radius: 1.5rem;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  align-items: flex-start;
+  /* align-items: flex-start; */
   padding: 15px;
   margin-left: 10px;
   margin-right: 10px;
@@ -119,7 +123,7 @@ body {
   background-color: cadetblue;
   border-radius: 1.5rem;
   padding: 10px;
-  margin: 0 10px 10px 10px;
+  margin: 0 10px 20px 10px;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -186,35 +190,127 @@ body {
 }
 
 
-#sellBtn {
+.sellBtn {
   padding: 10px;
   margin: 10px;
   border-radius: 0.9rem;
   background-color: #4098EC;
 }
 
+.acceptBtn {
+  padding: 10px;
+  margin: 0 10px 10px 10px;
+  border-radius: 0.9rem;
+  background-color: #40ec88;
+}
+
+.rejectBtn {
+  padding: 10px;
+  margin: 0 10px 10px 10px;
+  border-radius: 0.9rem;
+  background-color: #ec4049;
+}
+
+#pauseBtn{
+  padding: 10px;
+  margin: 0 10px 10px 10px;
+  border-radius: 0.9rem;
+  background-color: #ec4049;
+}
+
+#unpauseBtn{
+  padding: 10px;
+  margin: 0 10px 10px 10px;
+  border-radius: 0.9rem;
+  background-color: #40ec88;
+}
+
 .nftPrice {
   display: flex;
   flex-direction: row;
 }
-/*
-<div class = "nftCard">
 
-          <div class = "cardCover">
-            <img src="" alt="nft image"> 
-          </div>
-
-          <div class = "cardContent">
-            <p class = "nftName"></p>
-            <p class = "nftDescription"></p>
-          </div>
-
-          <div class = "sellBtn">
-            <button>Sell</button>
-          </div>
-
-        </div>
+#validatorsManager {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  margin: 20px 10px;
+  padding: 10px;
+}
 
 
-    */
-    
+#validatorAddressDiv {
+  border-radius: 1.5rem;
+  padding: 10px;
+  justify-content: center;
+  display: flex;
+}
+
+#validatorAddressDiv input{
+  border-radius: 0.4rem;
+  padding: 10px;
+}
+
+#validatorActionDiv {
+  border-radius: 1.5rem;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+
+#listingPriceManager{
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(256, 180, 241);
+  border-radius: 1.5rem;
+  margin: 20px 10px;
+  padding: 10px;
+  align-items: center;
+}
+
+#changePriceDiv {
+  display: flex;
+  flex-direction: column;
+align-items: center;
+
+}
+
+#listingPrice{
+  padding: 10px;
+  border-radius: .3rem;
+  margin: 10px;
+}
+
+#changeListingPriceButton {
+  padding: 10px;
+  margin: 0 10px 10px 10px;
+  border-radius: 0.9rem;
+  background-color: #40ec88;
+}
+
+#marketplaceManager {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  background-color: rgb(256, 180, 241);
+  border-radius: 1.5rem;
+  margin: 20px 10px;
+  padding: 10px;
+}
+
+#pendingItems{
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  background-color: rgb(256, 180, 241);
+  border-radius: 1.5rem;
+  margin: 20px 10px;
+  padding: 10px;
+}

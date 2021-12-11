@@ -46,7 +46,6 @@ export const NFT = {
         try {
             tokenURI = await nftContract.methods.tokenURI(tokenId).call();
         } catch(error) {
-            console.log(error);
             return error;
         }
         return tokenURI; 
@@ -75,9 +74,26 @@ export const NFT = {
     }
 };
 
+export let getListingPrice = async () => {
+    let isPaused = await marketplaceContract.methods.paused().call();
+    let listingPrice;
+    if(isPaused === false) {
+        try {
+            listingPrice = await marketplaceContract.methods.getListingPrice().call(); 
+        } catch(err) {
+            console.log(err);
+        }
+    }
+    if(listingPrice !== 'undefined') {
+        return listingPrice;
+    } else {
+        return "couldn't get listing price"
+    }
+}
+
 export let getAllOwnedTokensURIs = async (owner) => {
     let ownedCounter = await NFT.getTokenCountOfAnOwner(owner);
-    let ownedTokensURIs = [];
+    let ownedTokensURIs = {};
     let tempTokenID = 1;
     while(ownedCounter > 0) {
         let tempOwner;
@@ -88,26 +104,31 @@ export let getAllOwnedTokensURIs = async (owner) => {
         }
         if(owner.toLowerCase().toString() === tempOwner.toLowerCase().toString()) {
             let tempURI = await NFT.getTokenURI(tempTokenID);
-            ownedTokensURIs.push(tempURI);
+            ownedTokensURIs[tempTokenID] = tempURI;
             ownedCounter--;
         }
         tempTokenID++;
     }
-    if(ownedTokensURIs.length > 0) {
-        return ownedTokensURIs;
-    } else {
-        return "there is no items owned by the caller";
-    }
+    return ownedTokensURIs;
+    // if(ownedTokensURIs.length > 0) {
+    //     return ownedTokensURIs;
+    // } else {
+    //     return "there is no items owned by the caller";
+    // }
 }
+
 
 export const Marketplace = {
     createItemListingRequest : async (nft,tokenId,price) => {
         let currentAccount = mm.getCurrentAccount();
         let isPaused = await marketplaceContract.methods.paused().call();
+        let listingPrice = await getListingPrice();
         if(isPaused === false) {
             try {
-                await marketplaceContract.methods.createListingRequest(nft,tokenId,price).send({from: currentAccount}).then().catch(error => console.log(error));
-                await marketplaceContract.events.logPending({},function(error, event){console.log(event)});
+                await marketplaceContract.methods.createListingRequest(nft,tokenId,price).send({from: currentAccount, value: listingPrice}).then().catch(error => console.log(error));
+                await marketplaceContract.events.logPending({},function(error, event){console.log(event)}).on('data', (evnt) => {
+                    console.log(evnt);
+                });
                 return "request has been made" 
             } catch(error) {
                 console.log(error);
@@ -209,7 +230,7 @@ export const Marketplace = {
         if(currentAccount.toLowerCase().toString() === marketplaceOwner.toLowerCase().toString()) {
             if(isPaused === false) {
                 try {
-                    pendingCount = await marketplaceContract.methods.getNumberOfPendingNFTS().call();
+                    pendingCount = await marketplaceContract.methods.getNumberOfPendingNFTS().call({from: mm.getCurrentAccount()});
                 } catch (err) {
                     console.log(err);
                     return "ERROR: couldn't get number of pending nfts";
@@ -232,10 +253,10 @@ export const Marketplace = {
         let isValidator = await marketplaceContract.methods.hasRole(VALIDATOR_ROLE,currentAccount).call();
         if(isPaused === false && isValidator === true) {
             try {
-                pendingItems = await marketplaceContract.methods.getAllPedningItems().call();
+                pendingItems = await marketplaceContract.methods.getAllPedningItems().call({from: mm.getCurrentAccount()});
             } catch(error) {
                 console.log(error);
-                return "ERROR Item is not accepted"
+                return "ERROR cannot get pending items"
             }
         } else {
             return "marketplace should be working and you should be a validator in order to accept items"
@@ -254,7 +275,7 @@ export const Marketplace = {
         if(currentAccount.toLowerCase().toString() === marketplaceOwner.toLowerCase().toString()) {
             if(isPaused === false) {
                 try {
-                    soldCount = await marketplaceContract.methods.getNumberOfSoldNFTS().call();
+                    soldCount = await marketplaceContract.methods.getNumberOfSoldNFTS().call({from: mm.getCurrentAccount()});
                 } catch (err) {
                     console.log(err);
                     return "ERROR: couldn't get number of sold nfts";
@@ -277,7 +298,7 @@ export const Marketplace = {
         if(currentAccount.toLowerCase().toString() === marketplaceOwner.toLowerCase().toString()) {
             if(isPaused === false) {
                 try {
-                    soldItems = await marketplaceContract.methods.getAllSoldItems().call();
+                    soldItems = await marketplaceContract.methods.getAllSoldItems().call({from: mm.getCurrentAccount()});
                 } catch (err) {
                     console.log(err);
                     return "ERROR: getting sold items";
@@ -300,7 +321,7 @@ export const Marketplace = {
         if(currentAccount.toLowerCase().toString() === marketplaceOwner.toLowerCase().toString()) {
             if(isPaused === false) {
                 try {
-                    itemsCount = await marketplaceContract.methods.getNumberOfAllNFTS().call();
+                    itemsCount = await marketplaceContract.methods.getNumberOfAllNFTS().call({from: mm.getCurrentAccount()});
                 } catch (err) {
                     console.log(err);
                     return "ERROR: couldn't get number of all nfts";
@@ -320,7 +341,7 @@ export const Marketplace = {
         let isPaused = await marketplaceContract.methods.paused().call();
         if(isPaused === false) {
             try {
-                listedItems = await marketplaceContract.methods.getAllListedItems().call();
+                listedItems = await marketplaceContract.methods.getAllListedItems().call({from: mm.getCurrentAccount()});
             } catch(error) {
                 console.log(error);
                 return "ERROR in getting listed items"
@@ -342,7 +363,7 @@ export const Marketplace = {
         let isValidator = await marketplaceContract.methods.hasRole(VALIDATOR_ROLE,currentAccount).call();
         if(isPaused === false && isValidator === true) {
             try {
-                removedItems = await marketplaceContract.methods.getAllRemovedItems().call();
+                removedItems = await marketplaceContract.methods.getAllRemovedItems().call({from: mm.getCurrentAccount()});
             } catch(error) {
                 console.log(error);
                 return "ERROR getting removed items"
@@ -361,7 +382,7 @@ export const Marketplace = {
         let isPaused = await marketplaceContract.methods.paused().call();
         if(isPaused === false) {
             try {
-                createdItems = await marketplaceContract.methods.getItemsCreated().call();
+                createdItems = await marketplaceContract.methods.getItemsCreated().call({from: mm.getCurrentAccount()});
             } catch(error) {
                 console.log(error);
                 return "ERROR in getting created items"
@@ -380,7 +401,7 @@ export const Marketplace = {
         let isPaused = await marketplaceContract.methods.paused().call();
         if(isPaused === false) {
             try {
-                purchasedItems = await marketplaceContract.methods.getMyNFTS().call();
+                purchasedItems = await marketplaceContract.methods.getMyNFTS().call({from: mm.getCurrentAccount()});
             } catch(error) {
                 console.log(error);
                 return "ERROR in getting purchased items"
@@ -412,7 +433,7 @@ export const Marketplace = {
                         return 'error in adding validator';
                     }
                 } catch(err) {
-                    console.log(error);
+                    console.log(err);
                     return "ERROR in adding the validator"
                 }
             } else {
@@ -438,28 +459,12 @@ export const Marketplace = {
                         return 'error in removing validator';
                     }
                 } catch(err) {
-                    console.log(error);
+                    console.log(err);
                     return "ERROR in removing the validator"
                 }
             } else {
                 return "you should the marketplace owner in order to remove a validator"
             }
-        }
-    },
-    getListingPrice: async () => {
-        let isPaused = await marketplaceContract.methods.paused().call();
-        let listingPrice;
-        if(isPaused === false) {
-            try {
-                listingPrice = await marketplaceContract.methods.getListingPrice().call(); 
-            } catch(err) {
-                console.log(err);
-            }
-        }
-        if(listingPrice !== 'undefined') {
-            return listingPrice;
-        } else {
-            return "couldn't get listing price"
         }
     },
     changeListingPrice : async (newListingPrice) => {
@@ -536,4 +541,20 @@ export let isValidator = async (address) => {
         console.log(err);
     }
     return isValidator;
+}
+
+export let isAdmin = async (address) => {
+    let ADMIN_ROLE = Web3.utils.soliditySha3('ADMIN_ROLE');
+    let isAdmin;
+    try {
+        isAdmin = await marketplaceContract.methods.hasRole(ADMIN_ROLE,address).call();
+    } catch (err) {
+        console.log(err);
+    }
+    return isAdmin;
+}
+
+export let isMarketplacePaused = async () => {
+    let isPaused = await marketplaceContract.methods.paused().call();
+    return isPaused;
 }
