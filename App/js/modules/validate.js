@@ -36,7 +36,7 @@ window.addEventListener('load', async() => {
       } else {
         console.log('you are not allowed to validate');
         alert('you have to be a validator to access this page');
-        window.location.href = "../html/index.html";
+        window.location.href = "../html/explore.html";
       }
     }
   }
@@ -50,7 +50,8 @@ let getPendingNFTS = async () => {
 let getPendingMetaData = async () => {
   let pending = await getPendingNFTS();
   for(let i = 0; i < pending.length; i++) {
-    console.log(pending[i]['itemState']);
+    console.log(pending[i]['itemID']);
+    console.log(pending[i]);
     let tokenURI = await NFT.getTokenURI(pending[i]['tokenID']);
     getPendingNFTSMetadataFromURI(tokenURI,pending[i]['tokenID'],pending[i]['price'],pending[i]['itemID']);
   }
@@ -225,7 +226,7 @@ let changeListingPrice = async () => {
 }
 
 
-let getPendingNFTSMetadataFromURI = async(metadataURL,itemID,price) => {
+let getPendingNFTSMetadataFromURI = async(metadataURL,tokenID,price,itemID) => {
   fetch(metadataURL).then(function (response) {
     return response.text();
   }).then(function (data) {
@@ -257,6 +258,10 @@ let getPendingNFTSMetadataFromURI = async(metadataURL,itemID,price) => {
     let itemId = createNode('p');
     itemId.innerHTML = itemID;
     itemId.hidden = true;
+
+    let tokenId = createNode('p');
+    tokenId.innerHTML = tokenID;
+    tokenId.hidden = true;
 
     let nftPrice = createNode('p');
     let web3 = new Web3(window.ethereum);
@@ -312,6 +317,7 @@ let append = (parent, child) => {
 
 let acceptItem = async (event) => {
   let itemID = event.target.parentNode.parentNode.children[1].children[2].innerHTML;
+  console.log(itemID);
   let result = await Marketplace.acceptItem(itemID);
   if(result !== null) {
     console.log(result);

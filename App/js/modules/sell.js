@@ -19,7 +19,8 @@ let createNode = (name) => {
       console.log("to sell " + price + "   " + nftPrice);
       let tokenId = document.getElementById('tokenID').innerHTML;
       console.log('token id ' + tokenId);
-      Marketplace.createItemListingRequest(nftAddress,tokenId,nftPrice)
+      await Marketplace.createItemListingRequest(nftAddress,tokenId,nftPrice);
+      alert('List Request has been made successfully');
   }
   
   let retrieveNFTData = () => {

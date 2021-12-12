@@ -8,6 +8,8 @@
   <script type='text/javascript' src='../js/modules/config.js'></script>
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
   <link rel="stylesheet" type="text/css" href="../css/index.css">
+  <link rel="stylesheet" type="text/css" href="../css/index.css">
+
 
 </head>
 
@@ -15,7 +17,7 @@
   <header>
     <nav>
       <ul>
-        <li id="logo"><a href = "index.html"><h1>A.N.I.M.E. Marketplace</h1></a></li>
+        <li id="logo"><a href = "explore.html"><h1>A.N.I.M.E. Marketplace</h1></a></li>
         <li class="nav"><a href= "explore.html">Explore</a></li>
         <li class="nav"><a href = "mynfts.html">My NFTS</a></li>
         <li class="nav"><a href= "create.html">Create</a></li>
@@ -28,7 +30,7 @@
   </header>
   <main>
     <form>
-      <div class="container">
+      <div id ="createContainer">
         <h2>Create new Item</h2>
         <input type="text" placeholder="Item Name" name="nft_name" id="nft_name" required>
     
@@ -40,7 +42,9 @@
         <hr>
       </div>
     </form>
-    <button class="createNFTBtn" id="createBtn">Create</button>
+    <div id ="createBtnDiv">
+      <button class="createNFTBtn" id="createBtn">Create</button>
+    </div>
   </main>
 </body>
 

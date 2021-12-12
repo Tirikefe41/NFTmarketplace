@@ -1,16 +1,17 @@
-import {getAllOwnedTokensURIs,Marketplace} from "./smartContracts.js";
+import {getAllOwnedTokensURIs,Marketplace, NFT} from "./smartContracts.js";
 import * as mm from "./detectmm.js";
 
+const ownedNFTS = document.querySelector('.owned');
+const purchasedNFTS = document.querySelector('.purchased');
 const createdNFTS = document.querySelector('.created');
-const pendingNFTS = document.querySelector('pending');
-const listedNFTS = document.querySelector('.listed');
-const removednfts = document.querySelector(".removed");
 
 window.addEventListener('load', async() => {
+  await getOwnedNFTS();
+  await getPurhasedNFTS();
   await getCreatedNFTS();
 })
 
-let getCreatedNFTSMetadataFromURI = async(metadataURL,id) => {
+let getOwnedNFTSMetaDatafromURI = async(metadataURL,id) => {
   fetch(metadataURL).then(function (response) {
     return response.text();
   }).then(function (data) {
@@ -61,7 +62,7 @@ let getCreatedNFTSMetadataFromURI = async(metadataURL,id) => {
 
 
   
-    append(createdNFTS,nftCard);
+    append(ownedNFTS,nftCard);
 
   return data;
   }).catch(function (err) {
@@ -84,7 +85,20 @@ let goToSellPage = (event) => {
   window.location.href = "../html/sell.html";
 }
 
-let getPendingMetadataFromURI = async(metadataURL) => {
+
+let getPurhasedNFTS = async () => {
+  let pending = await Marketplace.getItemsPurchased();
+  console.log(pending);
+  for(let i = 0; i < pending.length; i++) {
+      console.log(pending[i]['itemID']);
+      console.log(pending[i]);
+      console.log(pending[i]['seller']);
+      let tokenURI = await NFT.getTokenURI(pending[i]['tokenID']);
+      getPurchasedMetadataFromURI(tokenURI,pending[i]['tokenID'],pending[i]['price'],pending[i]['itemID']);
+  }
+}
+
+let getPurchasedMetadataFromURI = async (metadataURL,tokenID,price,itemID) => {
   fetch(metadataURL).then(function (response) {
     return response.text();
   }).then(function (data) {
@@ -93,7 +107,7 @@ let getPendingMetadataFromURI = async(metadataURL) => {
     
     let nftCard = createNode('div');
     nftCard.setAttribute("class","nftCard");
-
+    
     let cardCover = createNode('div');
     cardCover.setAttribute("class","cardCover");
     let image = createNode('img');
@@ -113,23 +127,27 @@ let getPendingMetadataFromURI = async(metadataURL) => {
     description.setAttribute("class","nftDescription");
     description.innerHTML = metadata.Description;
 
-  
-    let sellBtn = document.createElement('button');
-    sellBtn.setAttribute("id","sellBtn");
-    sellBtn.innerHTML = "Sell";
-  
+    let itemId = createNode('p');
+    itemId.innerHTML = itemID;
+    itemId.hidden = true;
+
+    let tokenId = createNode('p');
+    tokenId.innerHTML = tokenID;
+    tokenId.hidden = true;
+
+    let nftPrice = createNode('p');
+    let web3 = new Web3(window.ethereum);
+    nftPrice.innerHTML = "Price:  " + web3.utils.fromWei(price,'ether') + "  ETH";
 
     append(cardContent,name);
     append(cardContent,description);
+    append(cardContent,itemId);
+    append(cardContent,nftPrice);
 
     append(nftCard,cardCover);
     append(nftCard,cardContent);
-    append(nftCard,sellBtn);
 
-
-  
-    append(createdNFTS,nftCard);
-
+    append(purchasedNFTS,nftCard);
 
   return data;
   }).catch(function (err) {
@@ -138,13 +156,95 @@ let getPendingMetadataFromURI = async(metadataURL) => {
 }
 
 
-
 let getCreatedNFTS = async () => {
+  let pending = await Marketplace.getItemListedByCaller();
+  console.log(pending);
+  for(let i = 0; i < pending.length; i++) {
+      console.log(pending[i]['itemID']);
+      console.log(pending[i]);
+      console.log(pending[i]['seller']);
+      let tokenURI = await NFT.getTokenURI(pending[i]['tokenID']);
+      getCreatedMetadatafromURI(tokenURI,pending[i]['tokenID'],pending[i]['price'],pending[i]['itemID'],pending[i]['itemState']);
+  }
+}
+
+let getCreatedMetadatafromURI = async (metadataURL,tokenID,price,itemID,state) => {
+  fetch(metadataURL).then(function (response) {
+    return response.text();
+  }).then(function (data) {
+    let metadata = JSON.parse(data);
+    console.log(metadata);
+    
+    let nftCard = createNode('div');
+    nftCard.setAttribute("class","nftCard");
+    
+    let cardCover = createNode('div');
+    cardCover.setAttribute("class","cardCover");
+    let image = createNode('img');
+    image.src = metadata.Image;
+    image.width = "250";
+    image.height = "250";
+    append(cardCover,image);
+
+    let cardContent = createNode('div');
+    cardContent.setAttribute("class","cardContent");
+
+    let name = createNode('p');
+    name.setAttribute("class","nftName");
+    name.innerHTML = metadata.Name;
+
+    let description = createNode('p');
+    description.setAttribute("class","nftDescription");
+    description.innerHTML = metadata.Description;
+
+    let itemId = createNode('p');
+    itemId.innerHTML = itemID;
+    itemId.hidden = true;
+
+    let tokenId = createNode('p');
+    tokenId.innerHTML = tokenID;
+    tokenId.hidden = true;
+
+
+    let itemState = createNode('p');
+    if(state == 0) {
+      itemState.innerHTML = "State : Pending";
+    } else if (state == 1) {
+      itemState.innerHTML = "State : Listed For Sale";
+    } else if (state == 2) {
+      itemState.innerHTML = "State : Sold";
+    } else if (state == 3) {
+      itemState.innerHTML = "State : Removed";
+    }
+    
+    let nftPrice = createNode('p');
+    let web3 = new Web3(window.ethereum);
+    nftPrice.innerHTML = "Price:  " + web3.utils.fromWei(price,'ether') + "  ETH";
+
+    append(cardContent,name);
+    append(cardContent,description);
+    append(cardContent,itemId);
+    append(cardContent,itemState);
+    append(cardContent,nftPrice);
+
+    append(nftCard,cardCover);
+    append(nftCard,cardContent);
+
+    append(createdNFTS,nftCard);
+
+  return data;
+  }).catch(function (err) {
+    console.warn('Something went wrong.', err);
+  });
+}
+
+
+let getOwnedNFTS = async () => {
   let created = await getAllOwnedTokensURIs(mm.getCurrentAccount());
   console.log(created)
   Object.keys(created).forEach(key => {
     console.log(key + " " + created[key]);
-    getCreatedNFTSMetadataFromURI(created[key],key);
+    getOwnedNFTSMetaDatafromURI(created[key],key);
   })
   return created;
 }
@@ -156,22 +256,3 @@ let createNode = (name) => {
 let append = (parent, child) => {
   return parent.appendChild(child);
 }
-
-let getPendingNFTS = async () => {
-  let pending = await Marketplace.getPendingItems();
-  for(let i = 0; i < pending.length ; i++) {
-    getMetadataFromURI(created[i]);
-  }
-  console.log("created tokens uris: "+ created);
-  return created;
-}
-
-
-let getListedNFTS = async () => {
-
-}
-
-let getRemovedNFTS = async () => {
-
-}
-

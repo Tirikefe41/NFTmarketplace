@@ -126,7 +126,7 @@ export const Marketplace = {
         if(isPaused === false) {
             try {
                 await marketplaceContract.methods.createListingRequest(nft,tokenId,price).send({from: currentAccount, value: listingPrice}).then().catch(error => console.log(error));
-                await marketplaceContract.events.logPending({},function(error, event){console.log(event)}).on('data', (evnt) => {
+                await marketplaceContract.events.logPending({},function(error, event){console.log(event)}).on('data', async (evnt) => {
                     console.log(evnt);
                 });
                 return "request has been made" 
@@ -154,13 +154,14 @@ export const Marketplace = {
             return "marketplace should be working and you should be the owner to withdrw the item"
         }
     },
-    buyItem : async (itemId) => {
+    buyItem : async (itemId, price) => {
         let currentAccount = mm.getCurrentAccount();
         let isPaused = await marketplaceContract.methods.paused().call();
         if(isPaused === false) {
             try {
-                await marketplaceContract.methods.BuyItem(itemId).send({from: currentAccount}).then().catch(error => console.log(error));
-                await marketplaceContract.events.logSold({},function(error, event){console.log(event)});
+                console.log('try to buy item');
+                await marketplaceContract.methods.BuyItem(itemId).send({from: currentAccount, value: price}).then().catch(error => console.log(error));
+                await marketplaceContract.events.logSold({},async(error, event) => {console.log(event)});
                 return "Item has been bought" 
             } catch(error) {
                 console.log(error);
@@ -173,12 +174,11 @@ export const Marketplace = {
     acceptItem : async (itemId) => {
         let currentAccount = mm.getCurrentAccount();
         let isPaused = await marketplaceContract.methods.paused().call();
-        let VALIDATOR_ROLE = Web3.utils.soliditySha3('VALIDATOR_ROLE');
-        let isValidator = await marketplaceContract.methods.hasRole(VALIDATOR_ROLE,currentAccount).call();
-        if(isPaused === false && isValidator === true) {
+        if(isPaused === false && await isValidator(currentAccount)) {
             try {
                 await marketplaceContract.methods.acceptItem(itemId).send({from: currentAccount}).then().catch(error => console.log(error));
-                await marketplaceContract.events.logListedForSale({},function(error, event){console.log(event)});
+                let event = await marketplaceContract.events.logListedForSale({},async(error, event) => {console.log(event)});
+                console.log(event);
                 return "Item has been accepted" 
             } catch(error) {
                 console.log(error);
@@ -191,12 +191,11 @@ export const Marketplace = {
     rejectItem : async (itemId) => {
         let currentAccount = mm.getCurrentAccount();
         let isPaused = await marketplaceContract.methods.paused().call();
-        let VALIDATOR_ROLE = Web3.utils.soliditySha3('VALIDATOR_ROLE');
-        let isValidator = await marketplaceContract.methods.hasRole(VALIDATOR_ROLE,currentAccount).call();
-        if(isPaused === false && isValidator === true) {
+        if(isPaused === false && isValidator(currentAccount)) {
             try {
                 await marketplaceContract.methods.rejectItem(itemId).send({from: currentAccount}).then().catch(error => console.log(error));
-                await marketplaceContract.events.logRemoved({},function(error, event){console.log(event)});
+                let event = await marketplaceContract.events.logRemoved({},async(error, event) => {console.log(event)});
+                console.log(event);
                 return "Item has been rejected" 
             } catch(error) {
                 console.log(error);

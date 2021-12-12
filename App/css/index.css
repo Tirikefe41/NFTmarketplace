@@ -14,11 +14,27 @@ h3 {
 /* Add padding to containers */
 .container {
   padding: 16px;
+  background-color: #f5f5f5;
+  border-radius: 1.5rem;
+  margin: 10px;
+}
+
+#createContainer{
   background-color: #ffffff;
   border-radius: 1.5rem;
   margin: 10px;
-  padding: 10px;
+  padding: 16px;
+  text-align: center;
 }
+
+#createBtnDiv {
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  margin: 10px;
+  padding: 16px;
+  text-align: center;
+}
+
 
 /* Full-width input fields */
 input[type=text], input[type=file] {
@@ -51,7 +67,6 @@ hr {
   margin: 8px 0;
   border: none;
   cursor: pointer;
-  width: 20%;
   opacity: 0.9;
 }
 
@@ -119,6 +134,18 @@ body {
   margin-right: 10px;
   }
 
+.purchased {
+  background-color: cadetblue;
+  border-radius: 1.5rem;
+  padding: 10px;
+  margin: 0 10px 20px 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
 .pending {
   background-color: cadetblue;
   border-radius: 1.5rem;
@@ -131,7 +158,7 @@ body {
   flex-wrap: wrap;
 }
 
-.created {
+.owned {
   background-color: chocolate;
   border-radius: 1.5rem;
   padding: 10px;
@@ -143,7 +170,7 @@ body {
   flex-wrap: wrap;
 }
 
-.listed {
+.created {
   background-color: crimson;
   border-radius: 1.5rem;
   padding: 10px;
@@ -167,8 +194,13 @@ body {
   flex-wrap: wrap;
 }
 
+#listedNftsContainer {
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  padding: 10px;
+}
 .nftCard {
-  background-color: #F5F5F5;
+  background-color: #dbd4d4;
   border-radius: 1.5rem;
   margin: 10px 0 10px 0;
   padding: 10px;
@@ -216,6 +248,22 @@ body {
   margin: 0 10px 10px 10px;
   border-radius: 0.9rem;
   background-color: #ec4049;
+}
+#buyBtn {
+  padding: 10px;
+  margin: 0 10px 10px 10px;
+  border-radius: 0.9rem;
+  background-color: #4098EC;
+}
+
+#listedNftsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 10px;
+  justify-content: space-evenly;
+  /* align-items: center; */
+  text-align: center;
 }
 
 #unpauseBtn{
@@ -266,7 +314,7 @@ body {
 #listingPriceManager{
   display: flex;
   flex-direction: column;
-  background-color: rgb(256, 180, 241);
+  background-color: #ffffff;
   border-radius: 1.5rem;
   margin: 20px 10px;
   padding: 10px;
@@ -298,7 +346,7 @@ align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  background-color: rgb(256, 180, 241);
+  background-color: #ffffff;
   border-radius: 1.5rem;
   margin: 20px 10px;
   padding: 10px;
@@ -309,7 +357,7 @@ align-items: center;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  background-color: rgb(256, 180, 241);
+  background-color: #ffffff;
   border-radius: 1.5rem;
   margin: 20px 10px;
   padding: 10px;
