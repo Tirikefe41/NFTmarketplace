@@ -22,6 +22,7 @@ const createMarketplaceContractInstance = () => {
         }
     }
 }
+
 const nftContract = createNftContractInstance();
 const marketplaceContract = createMarketplaceContractInstance();
 
@@ -33,10 +34,16 @@ export const NFT = {
             console.log(minter);
             tokenID = await nftContract.methods.createNFT(metadataUrl).send({from: minter}).then().catch(error => console.log(error));
 
-            nftContract.events.Transfer({},(error, event) => {
+            await nftContract.events.Transfer({},(error, event) => {
                 console.log(event);
                 console.log(error);
-            });
+            }).on('data', async(event) => {
+                console.log(event);
+                return event;
+            }).on('error', async(error) => {
+                console.log(error);
+                return error;
+            })
         }
         return tokenID;
     },
@@ -71,6 +78,29 @@ export const NFT = {
             return error;
         }
         return tokenCount;
+    },
+    getApproved: async (tokenID) => {
+        let isApproved;
+        try {
+            isApproved = await nftContract.methods.getApproved(tokenID).call();
+        } catch (err) {
+            console.log(err);
+            return;
+        }
+        if(isApproved !== 'undefined') {
+            return isApproved;
+        } else {
+            return "Error in getting approved address"
+        }
+    },
+    setApproved: async (tokenID) => {
+        let currentAccount = await mm.getCurrentAccount();
+        let marketplace = sc.nftMarketplaceAddress;
+        try {
+            await nftContract.methods.approve(marketplace,tokenID).send({from: currentAccount}).then().catch(error => console.log(error));
+        } catch (err) {
+            console.log(error);
+        }
     }
 };
 
@@ -128,7 +158,10 @@ export const Marketplace = {
                 await marketplaceContract.methods.createListingRequest(nft,tokenId,price).send({from: currentAccount, value: listingPrice}).then().catch(error => console.log(error));
                 await marketplaceContract.events.logPending({},function(error, event){console.log(event)}).on('data', async (evnt) => {
                     console.log(evnt);
-                });
+                    return evnt;
+                }).on('error', async(err) =>{
+                    console.log(err);
+                })
                 return "request has been made" 
             } catch(error) {
                 console.log(error);
@@ -144,7 +177,12 @@ export const Marketplace = {
         if(isPaused === false) {
             try {
                 await marketplaceContract.methods.withdrawItem(itemId).send({from: currentAccount}).then().catch(error => console.log(error));
-                await marketplaceContract.events.logRemoved({},function(error, event){console.log(event)});
+                await marketplaceContract.events.logRemoved({},function(error, event){console.log(event)}).on('data', async (evnt) => {
+                    console.log(evnt);
+                    return evnt;
+                }).on('error', async (err) => {
+                    return err;
+                })
                 return "Item has been removed" 
             } catch(error) {
                 console.log(error);
@@ -161,8 +199,12 @@ export const Marketplace = {
             try {
                 console.log('try to buy item');
                 await marketplaceContract.methods.BuyItem(itemId).send({from: currentAccount, value: price}).then().catch(error => console.log(error));
-                await marketplaceContract.events.logSold({},async(error, event) => {console.log(event)});
-                return "Item has been bought" 
+                await marketplaceContract.events.logSold({},async(error, event) => {console.log(event)}).on('data', async (evnt) => {
+                    console.log(evnt);
+                    return evnt;
+                }).on('error', async (err) => {
+                    return err;
+                })
             } catch(error) {
                 console.log(error);
                 return "ERROR Item is not bought"
@@ -177,7 +219,12 @@ export const Marketplace = {
         if(isPaused === false && await isValidator(currentAccount)) {
             try {
                 await marketplaceContract.methods.acceptItem(itemId).send({from: currentAccount}).then().catch(error => console.log(error));
-                let event = await marketplaceContract.events.logListedForSale({},async(error, event) => {console.log(event)});
+                let event = await marketplaceContract.events.logListedForSale({},async(error, event) => {console.log(event)}).on('data', async (evnt) => {
+                    console.log(evnt);
+                    return evnt;
+                }).on('error', async (err) => {
+                    return err;
+                })
                 console.log(event);
                 return "Item has been accepted" 
             } catch(error) {
@@ -194,9 +241,13 @@ export const Marketplace = {
         if(isPaused === false && isValidator(currentAccount)) {
             try {
                 await marketplaceContract.methods.rejectItem(itemId).send({from: currentAccount}).then().catch(error => console.log(error));
-                let event = await marketplaceContract.events.logRemoved({},async(error, event) => {console.log(event)});
-                console.log(event);
-                return "Item has been rejected" 
+                let event = await marketplaceContract.events.logRemoved({},async(error, event) => {console.log(event)}).on('data', async (evnt) => {
+                    console.log(evnt);
+                    return evnt;
+                }).on('error', async (err) => {
+                    return err;
+                })
+                return event;
             } catch(error) {
                 console.log(error);
                 return "ERROR Item is not rejected"
@@ -211,7 +262,12 @@ export const Marketplace = {
         if(isPaused === false) {
             try {
                 await marketplaceContract.methods.changeItemPrice(itemId,newPrice).send({from: currentAccount}).then().catch(error => console.log(error));
-                await marketplaceContract.events.logPriceChanged({},function(error, event){console.log(event)});
+                await marketplaceContract.events.logPriceChanged({},async (error, event) => {console.log(event)}).on('data', async (evnt) => {
+                    console.log(evnt);
+                    return evnt;
+                }).on('error', async (err) => {
+                    return err;
+                })
                 return "Item price has been changed successfully" 
             } catch(error) {
                 console.log(error);
@@ -425,7 +481,12 @@ export const Marketplace = {
                     await marketplaceContract.methods.grantValidator(validator).send({from: currentAccount}).then().catch(error => console.log(error));
                     let VALIDATOR_ROLE = Web3.utils.soliditySha3('VALIDATOR_ROLE');
                     let isValidator = await marketplaceContract.methods.hasRole(VALIDATOR_ROLE,validator).call();
-                    await nftMarketplace.events.RoleGranted({},function(error, event){console.log(event)});
+                    await nftMarketplace.events.RoleGranted({},async (error, event) => {console.log(event)}).on('data', async (evnt) => {
+                        console.log(evnt);
+                        return evnt;
+                    }).on('error', async (err) => {
+                        return err;
+                    })
                     if(isValidator === true) {
                         return "validator is added successfully"
                     } else {
@@ -451,7 +512,12 @@ export const Marketplace = {
                     await marketplaceContract.methods.revokeValidator(validator).send({from: currentAccount}).then().catch(error => console.log(error));
                     let VALIDATOR_ROLE = Web3.utils.soliditySha3('VALIDATOR_ROLE');
                     let isValidator = await marketplaceContract.methods.hasRole(VALIDATOR_ROLE,validator).call();
-                    await nftMarketplace.events.RoleRevoked({},function(error, event){console.log(event)});
+                    await nftMarketplace.events.RoleRevoked({},async (error, event) => {console.log(event)}).on('data', async (evnt) => {
+                        console.log(evnt);
+                        return evnt;
+                    }).on('error', async (err) => {
+                        return err;
+                    })
                     if(isValidator === false) {
                         return "validator is removed successfully"
                     } else {
@@ -475,9 +541,14 @@ export const Marketplace = {
                 try {
                     let result = await marketplaceContract.methods.changeListingPrice(newListingPrice).send({from: currentAccount}).then().catch(error => console.log(error));
                     console.log(result);
-                    await marketplaceContract.events.logListingPriceChanged({},(error, event) => {
+                    await marketplaceContract.events.logListingPriceChanged({},async (error, event) => {
                         console.log(event);
                         console.log(error);
+                    }).on('data', async (evnt) => {
+                        console.log(evnt);
+                        return evnt;
+                    }).on('error', async (err) => {
+                        return err;
                     })
                     return "marketplace listing price changed successfully"
                 } catch(err) {

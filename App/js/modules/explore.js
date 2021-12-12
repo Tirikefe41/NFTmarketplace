@@ -1,4 +1,6 @@
 import {Marketplace,NFT} from './smartContracts.js';
+import * as mm from './detectmm.js';
+
 let listedContainer = document.querySelector('#listedNftsContainer');
 
 window.addEventListener('load', async () => {
@@ -6,18 +8,21 @@ window.addEventListener('load', async () => {
 })
 
 let createNftsFromURI = async () => {
-  let listedItems = await getListedItems();
+  let listedItems = await Marketplace.getListedItems();
   console.log(listedItems);
   for(let i = 0; i < listedItems.length; i++) {
     if(listedItems[i]['itemID'] == 0) {
       console.log("invalid item");
     } else {
-        let tokenURI = await NFT.getTokenURI(listedItems[i]['tokenID']);
-        console.log(tokenURI);
-        getMetadataFromURI(tokenURI,listedItems[i]['tokenID'],listedItems[i]['price'],listedItems[i]['itemID']);
+        if(listedItems[i]['seller'].toLowerCase().toString() === mm.getCurrentAccount().toLowerCase.toString()) {
+          console.log('invalid items');
+        } else {
+          let tokenURI = await NFT.getTokenURI(listedItems[i]['tokenID']);
+          console.log(tokenURI);
+          getMetadataFromURI(tokenURI,listedItems[i]['tokenID'],listedItems[i]['price'],listedItems[i]['itemID']);
+        }
     }
   }
-
 }
 
 
@@ -91,9 +96,6 @@ let getMetadataFromURI = async (tokenURI,tokenID,price,itemID) => {
   });
 }
 
-let getListedItems = async () => {
- return await Marketplace.getListedItems();
-}
 
 let createNode = (name) => {
     return document.createElement(name);

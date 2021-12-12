@@ -49,8 +49,11 @@ let getImageURL = () => {
 }
 
 let CreateNft = async(image) => {
+  // get data from input fields
   let nftName = document.getElementById('nft_name').value;
   let nftDescription = document.getElementById('nft_description').value;
+
+  // upload image first to nft.storage decentralized stroage
   fetch('https://api.nft.storage/upload',{
     method: 'POST',
     headers: {
@@ -60,17 +63,22 @@ let CreateNft = async(image) => {
   }
   ).then( response => response.json())
   .then(success => {console.log(success)
+    
     imageURL = "https://" +success.value.cid + ".ipfs.dweb.link";
+
     console.log("Image URL: " + imageURL);
 
-
+    // construce nft data in JSON format
     let info = {
       "Name": nftName,
       "Description": nftDescription,
       "Image": imageURL
     }
     let data = JSON.stringify(info);
+
     console.log(data);
+
+    // upload the image with the data to nft.storage decentralized storage
     fetch('https://api.nft.storage/upload',{
       method: 'POST',
       headers: {
@@ -84,8 +92,12 @@ let CreateNft = async(image) => {
       metadataURL = "https://" +success.value.cid + ".ipfs.dweb.link";
       console.log("metadata URL: " + metadataURL);
     }).then( async () => {
+
+      // create NFT in etheruem blockchain with the url of the image and data 
       let tokenID =  await NFT.mintNFT(metadataURL);
       console.log(tokenID);
+
+      // clear input fields 
       metadataURL = 'undefined';
       imageURL = 'undefined';
       imageInput.value = null;
@@ -93,10 +105,8 @@ let CreateNft = async(image) => {
       let nftDescription = document.getElementById('nft_description');
       nftName.value = '';
       nftDescription.value = '';
-    })
-    .catch(error => console.log(error));
 
-
-  })
-  .catch(error => console.log(error));
+    }).catch(error => console.log(error));
+    
+  }).catch(error => console.log(error));
 }

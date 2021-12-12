@@ -1,6 +1,5 @@
 export const nftMarketplaceAddress = '0x77EAe40e83824C8736db06bb594DFA71917F856B'
 export const nftAddress = '0xD3B4B1C5B24a8ae444a21ca2E78f80bDBBe28f81';
-// const adminAddress = '0x92924b15E346B12A9f7a50f7050cb60b653Ec096'
 
 export const nftABI =
 [

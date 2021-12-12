@@ -1,5 +1,5 @@
 import { nftAddress } from './ABIS_and_Addresses.js';
-import {Marketplace} from './smartContracts.js';
+import {Marketplace, NFT} from './smartContracts.js';
 
 window.addEventListener('load', () => {
     retrieveNFTData();
@@ -19,8 +19,16 @@ let createNode = (name) => {
       console.log("to sell " + price + "   " + nftPrice);
       let tokenId = document.getElementById('tokenID').innerHTML;
       console.log('token id ' + tokenId);
-      await Marketplace.createItemListingRequest(nftAddress,tokenId,nftPrice);
-      alert('List Request has been made successfully');
+      let isMarketplaceApproved = await NFT.getApproved(tokenId);
+      console.log(isMarketplaceApproved);
+      if(isMarketplaceApproved == '0x0000000000000000000000000000000000000000') {
+        await NFT.setApproved(tokenId);
+        await Marketplace.createItemListingRequest(nftAddress,tokenId,nftPrice);
+        alert('List Request has been made successfully');      
+      } else {
+        await Marketplace.createItemListingRequest(nftAddress,tokenId,nftPrice);
+        alert('List Request has been made successfully');
+      }
   }
   
   let retrieveNFTData = () => {

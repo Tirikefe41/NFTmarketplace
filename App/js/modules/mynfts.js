@@ -87,14 +87,14 @@ let goToSellPage = (event) => {
 
 
 let getPurhasedNFTS = async () => {
-  let pending = await Marketplace.getItemsPurchased();
-  console.log(pending);
-  for(let i = 0; i < pending.length; i++) {
-      console.log(pending[i]['itemID']);
-      console.log(pending[i]);
-      console.log(pending[i]['seller']);
-      let tokenURI = await NFT.getTokenURI(pending[i]['tokenID']);
-      getPurchasedMetadataFromURI(tokenURI,pending[i]['tokenID'],pending[i]['price'],pending[i]['itemID']);
+  let purchased = await Marketplace.getItemsPurchased();
+  console.log(purchased);
+  for(let i = 0; i < purchased.length; i++) {
+      console.log(purchased[i]['itemID']);
+      console.log(purchased[i]);
+      console.log(purchased[i]['seller']);
+      let tokenURI = await NFT.getTokenURI(purchased[i]['tokenID']);
+      getPurchasedMetadataFromURI(tokenURI,purchased[i]['tokenID'],purchased[i]['price'],purchased[i]['itemID']);
   }
 }
 
@@ -157,14 +157,14 @@ let getPurchasedMetadataFromURI = async (metadataURL,tokenID,price,itemID) => {
 
 
 let getCreatedNFTS = async () => {
-  let pending = await Marketplace.getItemListedByCaller();
-  console.log(pending);
-  for(let i = 0; i < pending.length; i++) {
-      console.log(pending[i]['itemID']);
-      console.log(pending[i]);
-      console.log(pending[i]['seller']);
-      let tokenURI = await NFT.getTokenURI(pending[i]['tokenID']);
-      getCreatedMetadatafromURI(tokenURI,pending[i]['tokenID'],pending[i]['price'],pending[i]['itemID'],pending[i]['itemState']);
+  let created = await Marketplace.getItemListedByCaller();
+  console.log(created);
+  for(let i = 0; i < created.length; i++) {
+      console.log(created[i]['itemID']);
+      console.log(created[i]);
+      console.log(created[i]['seller']);
+      let tokenURI = await NFT.getTokenURI(created[i]['tokenID']);
+      getCreatedMetadatafromURI(tokenURI,created[i]['tokenID'],created[i]['price'],created[i]['itemID'],created[i]['itemState']);
   }
 }
 
