@@ -27,7 +27,7 @@ createNFTBtn.onclick = async() => {
   } else {
     if(file) {
       if(mm.isMMConnected()) {
-        if(await getChainId() === 4) { // check for rinkeby network
+        if(await mm.getChainId() === 4) { // check for rinkeby network
           console.log(await getChainId());
           console.log(file);
           await CreateNft(file);
