@@ -57467,10 +57467,16 @@
       "links": {},
       "address": "0x364C75E8c3Aee91e10D088Bc5B70F41F3ba0503C",
       "transactionHash": "0x9c691d335b0848407915d70dc3ea79ec2bf182157beee773b2e3184734ebf773"
+    },
+    "1639497203168": {
+      "events": {},
+      "links": {},
+      "address": "0x06E228631D0968DDF0C58D3049512e847D7E4E11",
+      "transactionHash": "0x609dbb69191c879eb4d0bf2dc0e3fb438ad687bd4976912049b72304fdd46e07"
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-12-12T12:06:50.431Z",
+  "updatedAt": "2021-12-14T15:53:54.903Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Ramadan Wasfi",
