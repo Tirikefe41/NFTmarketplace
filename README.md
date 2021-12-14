@@ -10,7 +10,7 @@ https://cutt.us/NFTMarketplace
 * open new terminal in empty directory
 * git clone https://github.com/ramadanWasfi/blockchain-developer-bootcamp-final-project.git
 * cd blockchain-developer-bootcamp-final-project
-* run ==npm install== to install dependencies
+* run npm install to install dependencies
 * open new terminal and run ganache-cli
 * run truffle test --network development
 
