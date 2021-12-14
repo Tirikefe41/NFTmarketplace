@@ -3,7 +3,7 @@ Full Stack Niche Fixed Price NFT Marketplace made for anime lovers.
 
 
 ## Deployed version url
-https://cutt.us/9l3L1
+https://animenftmarket.netlify.app/app/html/
 
 ## contracts test
 * open new terminal in empty directory
