@@ -1,5 +1,5 @@
 import {NFT} from "./smartContracts.js";
-import { getChainId } from "./detectmm.js";
+import * as mm from "./detectmm.js";
 import {API_KEY} from './config.js';
 
 let apiKey = API_KEY;
@@ -26,12 +26,16 @@ createNFTBtn.onclick = async() => {
     alert('please provide Item data');
   } else {
     if(file) {
-      if(await getChainId() === 4) { // check for rinkeby network
-        console.log(await getChainId());
-        console.log(file);
-        await CreateNft(file);
+      if(mm.isMMConnected()) {
+        if(await getChainId() === 4) { // check for rinkeby network
+          console.log(await getChainId());
+          console.log(file);
+          await CreateNft(file);
+        } else {
+          alert('please connect to rinkeby network');
+        }
       } else {
-        alert('please connect to rinkeby network');
+        alert('please connect metamask');
       }
     } else {
       alert('please provide Item data');

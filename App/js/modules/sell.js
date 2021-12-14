@@ -1,5 +1,6 @@
 import { nftAddress } from './ABIS_and_Addresses.js';
 import {Marketplace, NFT} from './smartContracts.js';
+import * as mm from './detectmm.js';
 
 window.addEventListener('load', () => {
     retrieveNFTData();
@@ -13,6 +14,7 @@ let createNode = (name) => {
     return parent.appendChild(child);
   }
   let requestForSell = async () => {
+   if(mm.isMMConnected()) {
       let price = document.getElementById('nftPrice').value;
       let web3 = new Web3(window.ethereum);
       let nftPrice = web3.utils.toWei(price);
@@ -29,6 +31,9 @@ let createNode = (name) => {
         await Marketplace.createItemListingRequest(nftAddress,tokenId,nftPrice);
         alert('List Request has been made successfully');
       }
+   } else {
+     alert('please connect metamask');
+   }
   }
   
   let retrieveNFTData = () => {

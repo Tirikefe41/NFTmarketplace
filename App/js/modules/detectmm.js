@@ -23,10 +23,10 @@ export let connectMetamask = async() => {
         console.error(error);
       }
     });
-
+    if(isMMConnected()) {
+      alert('metamask is connected successfully with address ' + getCurrentAccount());
+    }
     ethereum.on('accountsChanged', handleAccountsChanged);
-
-    alert('metamask is connected successfully with address ' + getCurrentAccount());
     let walletBtn = document.getElementById("mm-connect");
     walletBtn.style.backgroundColor="#32CD32";
   } else {

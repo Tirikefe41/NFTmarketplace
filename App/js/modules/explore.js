@@ -28,8 +28,6 @@ let createNftsFromURI = async () => {
     } else {
       alert('please connect to rinkeby network');
     }
-  } else {
-    alert('please connect metamask');
   }
 }
 
