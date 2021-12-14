@@ -3,7 +3,10 @@ body {
   padding: 0px;
   background-color: #F5F5F5	;
 }
-
+ 
+#mm-connect {
+  border-radius: 0.7rem;
+}
 
 * {box-sizing: border-box}
 

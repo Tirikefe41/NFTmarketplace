@@ -1,7 +1,8 @@
 import {NFT} from "./smartContracts.js";
 import { getChainId } from "./detectmm.js";
+import {API_KEY} from './config.js';
 
-const apiKey = config.API_KEY;
+let apiKey = API_KEY;
 
 let imageURL;
 let metadataURL;

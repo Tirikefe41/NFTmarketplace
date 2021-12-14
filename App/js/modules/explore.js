@@ -8,20 +8,28 @@ window.addEventListener('load', async () => {
 })
 
 let createNftsFromURI = async () => {
-  let listedItems = await Marketplace.getListedItems();
-  console.log(listedItems);
-  for(let i = 0; i < listedItems.length; i++) {
-    if(listedItems[i]['itemID'] == 0) {
-      console.log("invalid item");
-    } else {
-        if(listedItems[i]['seller'].toLowerCase().toString() === mm.getCurrentAccount().toLowerCase.toString()) {
-          console.log('invalid items');
+  if(mm.isMMConnected()) {
+    if(await mm.getChainId() === 4) {
+      let listedItems = await Marketplace.getListedItems();
+      console.log(listedItems);
+      for(let i = 0; i < listedItems.length; i++) {
+        if(listedItems[i]['itemID'] == 0) {
+        console.log("invalid item");
         } else {
-          let tokenURI = await NFT.getTokenURI(listedItems[i]['tokenID']);
-          console.log(tokenURI);
-          getMetadataFromURI(tokenURI,listedItems[i]['tokenID'],listedItems[i]['price'],listedItems[i]['itemID']);
+          if(listedItems[i]['seller'].toLowerCase().toString() === mm.getCurrentAccount().toLowerCase().toString()) {
+          console.log('invalid items');
+          } else {
+            let tokenURI = await NFT.getTokenURI(listedItems[i]['tokenID']);
+            console.log(tokenURI);
+            getMetadataFromURI(tokenURI,listedItems[i]['tokenID'],listedItems[i]['price'],listedItems[i]['itemID']);
+          }
         }
+      }
+    } else {
+      alert('please connect to rinkeby network');
     }
+  } else {
+    alert('please connect metamask');
   }
 }
 

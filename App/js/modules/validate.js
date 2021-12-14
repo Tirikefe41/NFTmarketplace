@@ -36,7 +36,7 @@ window.addEventListener('load', async() => {
       } else {
         console.log('you are not allowed to validate');
         alert('you have to be a validator to access this page');
-        window.location.href = "../html/explore.html";
+        window.location.href = "../html/index.html";
       }
     }
   }
