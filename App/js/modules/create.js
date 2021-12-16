@@ -23,13 +23,18 @@ createNFTBtn.onclick = async() => {
   let nftDescription = document.getElementById('nft_description').value;
   let file = imageInput.files[0];
   if(nftName === '' || nftDescription === '') {
-    alert('please provide Item data');
+    alert('please provide Item data');    
   } else {
     if(file) {
       if(mm.isMMConnected()) {
         if(await mm.getChainId() === 4) { // check for rinkeby network
           console.log(file);
-          await CreateNft(file);
+          await CreateNft(file)
+          .then((res) => {
+            console.log(res);
+          }).catch((error) => {
+            console.log(error);
+          });
         } else {
           alert('please connect to rinkeby network');
         }
@@ -68,7 +73,7 @@ let CreateNft = async(image) => {
   ).then( response => response.json())
   .then(success => {console.log(success)
     
-    imageURL = "https://" +success.value.cid + ".ipfs.dweb.link";
+    imageURL = "https://" + success.value.cid + ".ipfs.dweb.link";
 
     console.log("Image URL: " + imageURL);
 
@@ -98,8 +103,14 @@ let CreateNft = async(image) => {
     }).then( async () => {
 
       // create NFT in etheruem blockchain with the url of the image and data 
-      let tokenID =  await NFT.mintNFT(metadataURL);
-      console.log(tokenID);
+      let tokenID =  await NFT.mintNFT(metadataURL)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      
 
       // clear input fields 
       metadataURL = 'undefined';

@@ -10,20 +10,38 @@ window.addEventListener('load', async () => {
 let createNftsFromURI = async () => {
   if(mm.isMMConnected()) {
     if(await mm.getChainId() === 4) {
-      let listedItems = await Marketplace.getListedItems();
-      console.log(listedItems);
-      for(let i = 0; i < listedItems.length; i++) {
-        if(listedItems[i]['itemID'] == 0) {
-        console.log("invalid item");
-        } else {
-          if(listedItems[i]['seller'].toLowerCase().toString() === mm.getCurrentAccount().toLowerCase().toString()) {
-          console.log('invalid items');
+      let listedItems;
+      await Marketplace.getListedItems()
+      .then((res) => {
+        listedItems = res;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      if(listedItems !== 'undefined') {
+        console.log(listedItems);
+        for(let i = 0; i < listedItems.length; i++) {
+          if(listedItems[i]['itemID'] == 0) {
+          console.log("invalid item");
           } else {
-            let tokenURI = await NFT.getTokenURI(listedItems[i]['tokenID']);
-            console.log(tokenURI);
-            getMetadataFromURI(tokenURI,listedItems[i]['tokenID'],listedItems[i]['price'],listedItems[i]['itemID']);
+            if(listedItems[i]['seller'].toLowerCase().toString() === mm.getCurrentAccount().toLowerCase().toString()) {
+            console.log('invalid items');
+            } else {
+              let tokenURI;
+              await NFT.getTokenURI(listedItems[i]['tokenID'])
+              .then((res) => {
+                tokenURI = res;
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+              if(tokenURI !== 'undefined') {
+                console.log(tokenURI);
+                getMetadataFromURI(tokenURI,listedItems[i]['tokenID'],listedItems[i]['price'],listedItems[i]['itemID']);
+              }
+            }
           }
-        }
+      }
       }
     } else {
       alert('please connect to rinkeby network');
@@ -128,5 +146,12 @@ let createNode = (name) => {
     console.log(typeof itemID);
 
     
-    let res = await Marketplace.buyItem(itemID,price);
+    let buyResult;
+    await Marketplace.buyItem(itemID,price)
+    .then((res) => {
+      console.log(res);
+      buyResult = res;
+    }).catch((error) => {
+      console.log(error);
+    });
   }

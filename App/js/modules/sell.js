@@ -6,13 +6,8 @@ window.addEventListener('load', () => {
     retrieveNFTData();
 })
 
-let createNode = (name) => {
-    return document.createElement(name);
-  }
-  
-  let append = (parent, child) => {
-    return parent.appendChild(child);
-  }
+
+
   let requestForSell = async () => {
    if(mm.isMMConnected()) {
       let price = document.getElementById('nftPrice').value;
@@ -22,14 +17,13 @@ let createNode = (name) => {
       let tokenId = document.getElementById('tokenID').innerHTML;
       console.log('token id ' + tokenId);
       let isMarketplaceApproved = await NFT.getApproved(tokenId);
-      console.log(isMarketplaceApproved);
+
       if(isMarketplaceApproved == '0x0000000000000000000000000000000000000000') {
+        console.log('gotcha');
         await NFT.setApproved(tokenId);
-        await Marketplace.createItemListingRequest(nftAddress,tokenId,nftPrice);
-        alert('List Request has been made successfully');      
+        await Marketplace.createItemListingRequest(nftAddress,tokenId,nftPrice);        
       } else {
         await Marketplace.createItemListingRequest(nftAddress,tokenId,nftPrice);
-        alert('List Request has been made successfully');
       }
    } else {
      alert('please connect metamask');
@@ -135,6 +129,14 @@ let createNode = (name) => {
     sellBtn.style.width = "15%";
     sellBtn.style.textAlign = "center";
   }
+
+let createNode = (name) => {
+    return document.createElement(name);
+}
+  
+let append = (parent, child) => {
+    return parent.appendChild(child);
+}
 
   /*
 //   let convertPrice = () => {

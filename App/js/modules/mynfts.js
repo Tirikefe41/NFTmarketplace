@@ -87,14 +87,33 @@ let goToSellPage = (event) => {
 
 
 let getPurhasedNFTS = async () => {
-  let purchased = await Marketplace.getItemsPurchased();
-  console.log(purchased);
-  for(let i = 0; i < purchased.length; i++) {
+  let purchased;
+  await Marketplace.getItemsPurchased()
+  .then((res) => {
+    purchased = res;
+    console.log(purchased);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+  if(purchased !== 'undefined') {
+    for(let i = 0; i < purchased.length; i++) {
       console.log(purchased[i]['itemID']);
       console.log(purchased[i]);
       console.log(purchased[i]['seller']);
-      let tokenURI = await NFT.getTokenURI(purchased[i]['tokenID']);
-      getPurchasedMetadataFromURI(tokenURI,purchased[i]['tokenID'],purchased[i]['price'],purchased[i]['itemID']);
+      let tokenURI;
+      await NFT.getTokenURI(purchased[i]['tokenID'])
+      .then((res) => {
+        tokenURI = res;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      if(tokenURI !== 'undefined') {
+        getPurchasedMetadataFromURI(tokenURI,purchased[i]['tokenID'],purchased[i]['price'],purchased[i]['itemID']);
+      }
+    }
   }
 }
 
@@ -157,14 +176,32 @@ let getPurchasedMetadataFromURI = async (metadataURL,tokenID,price,itemID) => {
 
 
 let getCreatedNFTS = async () => {
-  let created = await Marketplace.getItemListedByCaller();
-  console.log(created);
-  for(let i = 0; i < created.length; i++) {
+  let created;
+  await Marketplace.getItemListedByCaller()
+  .then((res) => {
+    created = res;
+    console.log(created);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+  if(created !== 'undefined') {   
+    for(let i = 0; i < created.length; i++) {
       console.log(created[i]['itemID']);
       console.log(created[i]);
       console.log(created[i]['seller']);
-      let tokenURI = await NFT.getTokenURI(created[i]['tokenID']);
-      getCreatedMetadatafromURI(tokenURI,created[i]['tokenID'],created[i]['price'],created[i]['itemID'],created[i]['itemState']);
+      let tokenURI;
+      await NFT.getTokenURI(created[i]['tokenID'])
+      .then((res) => {
+        tokenURI = res;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      if(tokenURI !== 'undefined') {
+        getCreatedMetadatafromURI(tokenURI,created[i]['tokenID'],created[i]['price'],created[i]['itemID'],created[i]['itemState']);
+      }
+    }
   }
 }
 
@@ -240,13 +277,24 @@ let getCreatedMetadatafromURI = async (metadataURL,tokenID,price,itemID,state) =
 
 
 let getOwnedNFTS = async () => {
-  let created = await getAllOwnedTokensURIs(mm.getCurrentAccount());
-  console.log(created)
-  Object.keys(created).forEach(key => {
-    console.log(key + " " + created[key]);
-    getOwnedNFTSMetaDatafromURI(created[key],key);
+  let created;
+  await getAllOwnedTokensURIs(mm.getCurrentAccount())
+  .then((res) => {
+    created = res;
+    console.log(created)
   })
-  return created;
+  .catch((error) => {
+    console.log(error);
+  });
+
+  if(created !== 'undefined') {
+    Object.keys(created).forEach(key => {
+      console.log(key + " " + created[key]);
+      getOwnedNFTSMetaDatafromURI(created[key],key);
+    })
+    return created;
+  }
+  
 }
 
 let createNode = (name) => {

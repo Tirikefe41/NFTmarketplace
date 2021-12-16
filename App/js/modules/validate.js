@@ -14,16 +14,16 @@ window.addEventListener('load', async() => {
       let admin = await isAdmin(mm.getCurrentAccount());
       if(validator === true && admin === true) {
         if(ispaused) {
-          await createListingPriceManager()
+          await createListingPriceManager();
           await createMarketplaceManager();
-          await updateCurrentMarketplaceState()
+          await updateCurrentMarketplaceState();
         } else {
-          let pending = await getPendingMetaData();
+          await getPendingMetaData();
           await createValidatorManager();
           await createMarketplaceManager();
-          await updateCurrentMarketplaceState()
-          await createListingPriceManager()
-          await updatecurrentListingPrice()
+          await updateCurrentMarketplaceState();
+          await createListingPriceManager();
+          await updatecurrentListingPrice();
         }
         
         console.log('you are allowed to validate' + ' and you are the admin')
@@ -43,17 +43,44 @@ window.addEventListener('load', async() => {
 })
 
 let getPendingNFTS = async () => {
-  let pending = await Marketplace.getPendingItems();
-  return pending;
+  let pending;
+  await Marketplace.getPendingItems()
+  .then((res) => {
+    pending = res;
+  })
+  .catch((error) => {
+    console.log(error);
+  })
+  if(pending !== 'undefined') {
+    return pending;
+  }
 }
 
 let getPendingMetaData = async () => {
-  let pending = await getPendingNFTS();
-  for(let i = 0; i < pending.length; i++) {
-    console.log(pending[i]['itemID']);
-    console.log(pending[i]);
-    let tokenURI = await NFT.getTokenURI(pending[i]['tokenID']);
-    getPendingNFTSMetadataFromURI(tokenURI,pending[i]['tokenID'],pending[i]['price'],pending[i]['itemID']);
+  let pending;
+  await getPendingNFTS()
+  .then((res) => {
+    pending = res;
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+  if(pending !== 'undefined') {
+    for(let i = 0; i < pending.length; i++) {
+      console.log(pending[i]['itemID']);
+      console.log(pending[i]);
+      let tokenURI;
+      await NFT.getTokenURI(pending[i]['tokenID'])
+      .then((res) => {
+        tokenURI = res;
+      })
+      .catch((error) => {
+        console.log(error)
+      });
+      if(tokenURI !== 'undefined') {
+        getPendingNFTSMetadataFromURI(tokenURI,pending[i]['tokenID'],pending[i]['price'],pending[i]['itemID']);
+      }
+    }
   }
 }
 
@@ -161,16 +188,16 @@ let addValidator = async () => {
   let web3 = new Web3(window.ethereum);
   let res = web3.utils.isAddress(address.value);
   if(res) {
-      let result = await Marketplace.addValidator(address.value);
-      if(result !== null) {
-        console.log(result);
-        alert('the validator is added successfully');
-      } else {
-        alert('error in removing the validator');
-      }
-    } else {
+      await Marketplace.addValidator(address.value)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } else {
       alert('please enter a valid address');
-    }
+  }
 }
 
 let removeValidator = async () => {
@@ -194,35 +221,51 @@ let removeValidator = async () => {
 
 
 let pauseMarket = async () => {
-  let result = await Marketplace.pauseMarketplace();
-  if(result !== null) {
-    console.log(result);
-    alert('the marketplace is paused successfully');
+  let res = await isMarketplacePaused();
+  if(res === false) {
+    await Marketplace.pauseMarketplace()
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+  } else {
+    alert('the marketplace should be working to pause it');
   }
 }
 
 let unpauseMarket = async () => {
-  let result = await Marketplace.unpauseMarketplace();
-  if(result !== null) {
-    console.log(result);
-    alert('the marketplace is unpaused successfully');
+  let res = await isMarketplacePaused();
+  if(res === true) {
+    await Marketplace.unpauseMarketplace()
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+  } else {
+    alert('the marketplace should be paused to unpause it');
   }
 }
 
 let changeListingPrice = async () => {
+
   let listingPrice = document.querySelector('#listingPrice');
-  console.log(listingPrice)
-  let isMarketPaused = await isMarketplacePaused();
-  if(isMarketPaused) {
-    let result = await Marketplace.changeListingPrice(listingPrice);
-    if(result !== null) {
-      console.log(result);
-      alert('The listing price is changed successsfully');
-    }
-  } else {
-    alert('the marketplace should paused first in order to change the listing price');
-  }
- 
+  console.log(listingPrice.value);
+  let isMarketPaused;
+  await isMarketplacePaused()
+  .then((res) => {
+    isMarketPaused = res; 
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+  console.log(isMarketPaused);
+  if(isMarketPaused)
+    await Marketplace.changeListingPrice(listingPrice.value);
 }
 
 
@@ -318,18 +361,23 @@ let append = (parent, child) => {
 let acceptItem = async (event) => {
   let itemID = event.target.parentNode.parentNode.children[1].children[2].innerHTML;
   console.log(itemID);
-  let result = await Marketplace.acceptItem(itemID);
-  if(result !== null) {
-    console.log(result);
-    alert('item accepted successfully');
-  }
+  await Marketplace.acceptItem(itemID)
+  .then((res) => {
+    console.log(res);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 }
 
 let rejectItem = async (event) => {
   let itemID = event.target.parentNode.parentNode.children[1].children[2].innerHTML;
-  let result = await Marketplace.rejectItem(itemID);
-  if(result !== null) {
-    console.log(result);
-    alert('item rejected successfully');
-  }
+  console.log(itemID);
+  await Marketplace.rejectItem(itemID)
+  .then((res) => {
+    console.log(res);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 }
