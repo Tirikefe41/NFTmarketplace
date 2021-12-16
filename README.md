@@ -21,10 +21,10 @@ https://animenftmarket.netlify.app/app/html/
 ## User Sell Workflow
 1. Register with metamask
 2. Click Create NFT Button
-3. Enter NFT Details [*Name* - *Description* - *Image* - *Price*]
+3. Enter NFT Details [*Name* - *Description* - *Image*]
 4. Click Submit Button
 5. new NFT will be created
-6. if the user wants to sell it The user shall go to mynfts page and click sell button
-7. After that the nft will be in pending state and needed to be validated by a validator or the admin
-8. after the nft is validated the nft will be put in the marketplace for sale
+6. if the user wants to sell it The user shall go to mynfts page and enter the price then click sell button
+8. After that the nft will be in pending state and needed to be validated by a validator or the admin
+9. after the nft is validated the nft will be put in the marketplace for sale
 
