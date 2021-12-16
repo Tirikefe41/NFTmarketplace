@@ -15,6 +15,7 @@
     "truffle-assertions": "^0.9.2"
   },
   "scripts": {
+    "dev": "node App/setAPIKey.js",
     "start": "http-server -p 8080 ./App -o /html/index.html"
   }
 }
