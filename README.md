@@ -13,6 +13,16 @@ https://animenftmarket.netlify.app/app/html/
 * open new terminal and run ganache-cli
 * run truffle test --network development
 
+## how to setup the project to run locally
+* you should have nft.storage api key in order to run the project locally
+* after you cloned the repo and run npm install
+* open new terminal and run ganache-cli
+* in a new terminal run truffle migrate --network deveopment
+* change nftAddress and nftMarketplaceAddress variables in path App/js/modules/ABIS_and_Addresses.js with the addresses of local ganache-cli deployed addresses
+* npm run dev
+* npm run start 
+ 
+
 ## User Requirements
 * Sell Anime NFT
 * Buy Anime NFT
