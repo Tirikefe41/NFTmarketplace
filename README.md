@@ -20,6 +20,7 @@ https://animenftmarket.netlify.app/app/html/
 * in a new terminal run truffle migrate --network deveopment
 * change nftAddress and nftMarketplaceAddress variables in path App/js/modules/ABIS_and_Addresses.js with the addresses of local ganache-cli deployed addresses
 * npm run dev
+* in terminal you should enter your nft.storage api key
 * npm run start 
  
 
