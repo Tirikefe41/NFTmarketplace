@@ -21,6 +21,7 @@ https://animenftmarket.netlify.app/app/html/
 * change nftAddress and nftMarketplaceAddress variables in path App/js/modules/ABIS_and_Addresses.js with the addresses of local ganache-cli deployed addresses
 * npm run dev
 * in terminal you should enter your nft.storage api key
+* make sure that metamask is connected to ganache-cli network with id 1337 and localhost:8545
 * npm run start 
  
 
