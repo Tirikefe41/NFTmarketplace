@@ -8,6 +8,9 @@ https://animenftmarket.netlify.app/app/html/
 ## screencast link
 https://www.youtube.com/watch?v=NNSUfZltc2w
 
+## Ethereum public address
+0x92924b15E346B12A9f7a50f7050cb60b653Ec096
+
 ## contracts test
 * open new terminal in empty directory
 * git clone https://github.com/ramadanWasfi/blockchain-developer-bootcamp-final-project.git
