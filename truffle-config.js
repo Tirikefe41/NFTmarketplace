@@ -17,10 +17,10 @@
  * phrase from a file you've .gitignored so it doesn't accidentally become public.
  *
  */
- require('dotenv').config();
- const HDWallet = require('@truffle/hdwallet-provider')
- const Infura_Url =  process.env.INFURA_URL;
- const mnemonic = process.env.MNEMONIC;
+ const HDWalletProvider = require('@truffle/hdwallet-provider');
+ const infuraURL = 'https://rinkeby.infura.io/v3/7ca09b31b69c4b10a32976b093af1b23';
+ const fs = require('fs');
+ const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 module.exports = {
   /**
@@ -45,7 +45,7 @@ module.exports = {
      port: 8545,            // Standard Ethereum port (default: none)
      network_id: "*",       // Any network (default: none)
     },
-    // Another network with more advanced options...
+    // Another network with more ahttps://github.com/ramadanWasfi/blockchain-developer-bootcamp-final-project.gitdvanced options...
     // advanced: {
     // port: 8777,             // Custom port
     // network_id: 1342,       // Custom network
@@ -57,7 +57,7 @@ module.exports = {
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
     rinkeby: {
-    provider: () => new HDWallet(mnemonic, Infura_Url),
+    provider: () => new HDWalletProvider(mnemonic, infuraURL),
     network_id: 4,       // rinkeby's id
     gas: 5500000,        // rinkeby has a lower block limit than mainnet
     confirmations: 2,    // # of confs to wait between deployments. (default: 0)

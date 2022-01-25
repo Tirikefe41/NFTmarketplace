@@ -16,7 +16,7 @@ rl.question("What is your nft.storage API Key? ", (apikey) => {
     APIPhrase += "'" + APIKey + "'"; 
     console.log(APIPhrase);
 
-    fs.writeFile('./js/modules/config.js',APIPhrase, function (err) {
+    fs.writeFile('./App/js/modules/config.js',APIPhrase, function (err) {
         if (err) throw err;
         console.log('config File is created successfully.');
       });
